@@ -17,55 +17,58 @@
             <h2>Inward</h2>
             {{-- {{ Auth::user() }} --}}
         </div>
+        <div class="inward_form">
+            <div class="second">
+                <form action="{{ route('add_inward') }}" method="POST">
+                    @csrf
+                    <div class="input">
+                        <label for="date-time">Date & Time</label>
+                        <input type="datetime-local" name="date_time" id="date-time" value="{{ old('date_time') }}">
 
-        <div class="second">
-            <form action="{{ route('add_inward') }}" method="POST">
-                @csrf
-                <div class="input">
-                    <label for="date-time">Date & Time</label>
-                    <input type="datetime-local" name="date_time" id="date-time" value="{{ old('date_time') }}">
-                    <span style="text-align: center;">
-                        @error('date_time')
-                            {{ $message }}
-                        @enderror
-                    </span>
-                </div>
+                        <span>
+                            @error('date_time')
+                                {{ $message }}
+                            @enderror
+                        </span>
+                    </div>
 
-                <div class="input">
-                    <label for="Select">Select Quality</label>
-                    {{-- <select name="select" id="Select">
+                    <div class="input">
+                        <label for="Select">Select Quality</label>
+                        {{-- <select name="select" id="Select">
                         <option value="qua1">Quality</option>
                         <option value="qua2">Quality</option>
                         <option value="qua3">Quality</option>
                     </select> --}}
-                    <select name="select" id="Select">
-                        @foreach ($qulitys as $qulity)
-                            <option value="{{ $qulity->id }}">{{ $qulity->Quality }}</option>
-                        @endforeach
-                    </select>
-                    <span style="text-align: center;">
-                        @error('select')
-                            {{ $message }}
-                        @enderror
-                    </span>
-                </div>
+                        <select name="select">
+                            <option value="" selected disabled hidden>Quality</option>
+                            @foreach ($qulitys as $qulity)
+                                <option value="{{ $qulity->id }}" {{ (collect(old('select'))->contains($qulity->id)) ? 'selected':'' }}>{{ $qulity->Quality }}</option>
+                            @endforeach
+                        </select>
+                        <span>
+                            @error('select')
+                                {{ $message }}
+                            @enderror
+                        </span>
+                    </div>
 
-                <div class="input">
-                    <label for="number">Enter meter</label>
-                    <input type="number" name="number" id="number" value="{{ old('number') }}"
-                        placeholder="100 Meter">
-                    <span style="text-align: center;">
-                        @error('number')
-                            {{ $message }}
-                        @enderror
-                    </span>
-                </div>
+                    <div class="input">
+                        <label for="number">Enter meter</label>
+                        <input type="number" name="number" id="number" value="{{ old('number') }}"
+                            placeholder="100 Meter">
+                        <span>
+                            @error('number')
+                                {{ $message }}
+                            @enderror
+                        </span>
+                    </div>
 
-                <div class="buttons">
-                    <button type="submit" id="submit">Submit</button>
-                    <button id="s-n">Submit & Next</button>
-                </div>
-            </form>
+                    <div class="buttons">
+                        <button type="submit" id="submit">Submit</button>
+                        <button id="s-n">Submit & Next</button>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
 

@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\inwardsRequest;
+use App\Http\Requests\outwardRequest;
+use App\Models\inward;
+use App\Models\outward;
 use App\Models\registration;
 use App\Models\User;
 use App\Rules\Allrules;
@@ -21,11 +24,17 @@ class AllController extends Controller
 
     public function view_registration()
     {
+        if (Auth::check()) {
+            return redirect()->route('main_page');
+        }
         return view("registration_form");
     }
 
     public function view_login()
     {
+        if (Auth::check()) {
+            return redirect()->route('main_page');
+        }
         return view("login_form");
     }
 
@@ -41,49 +50,40 @@ class AllController extends Controller
         } else {
             return redirect()->route('log_in_page');
         }
-        // return view("inward_page");
     }
 
     public function view_outward()
     {
         if (Auth::check()) {
             $qulitys = DB::table('qualitys')->get();
-            return view('outward_page', ['qulitys' => $qulitys]);
+            $vendors = DB::table('vendors')->get();
+            return view('outward_page', ['qulitys' => $qulitys, 'vendors' => $vendors]);
         } else {
             return redirect()->route('log_in_page');
         }
-        // return view("outward_page");
     }
 
     public function userRegistration(Request $req)
     {
         $req->validate([
-            'name' => 'required|alpha',
+            'name' => 'required|regex:/^[a-zA-Z0-9]+([_ -]?[a-zA-Z0-9])*$/',
             'number' => 'required|numeric|digits:10',
-            'email' => 'required|email',
+            'email' => 'required|email|unique:App\Models\User,email',
             'password' => 'required|numeric|digits:4',
         ]);
 
         $users = new User;
         $users->name = $req->name;
-        // $users->Number = $req->number;
+        $users->number = $req->number;
         $users->email = $req->email;
         $users->password = $req->password;
 
         $users->save();
         return view("login_form");
-        // return $req['name'];
-        // if ($req) {
-        //     return view("login_form");
-        // }
-        // else{
-        //     return "<h1>hello</h1>";
-        // }
     }
 
     public function userlogin(Request $req)
     {
-        // return $req->Email . $req->Password;
 
         $data = $req->validate([
             "email" => "required|email",
@@ -91,28 +91,16 @@ class AllController extends Controller
         ]);
 
         $user = User::where('email', '=', $req->email)->first();
-        // dd($user);
         if ($user && Hash::check($req->password, $user->password)) {
             Auth::login($user);
             if (Auth::check()) {
-                // dd($user);
                 return redirect()->route('main_page');
-                // return 'ok';
             } else {
-                return 'ok not';
+                return redirect('log-in')->withError('Login information is Incorrect');
             }
         } else {
-            return 'not';
+            return redirect('log-in')->withError('Login information is Incorrect');
         }
-        // $email = $req->Email;
-        // $password = $req->Password;
-        // if(Auth::attempt($data)) {
-        //     return "hello";
-        // }
-        // else{
-        //     return "password";
-        // }
-
     }
 
 
@@ -123,13 +111,11 @@ class AllController extends Controller
             $user = Auth::user();
             return view('main_page');
         } else {
-            // $user = Auth::user();
-            // return $user. "yes";
             return redirect()->route('log_in_page');
         }
     }
 
-    public function index_data($qulitys)
+    public function qulitys_data($qulitys)
     {
         $qulitys = DB::table('qualitys')->get();
         return view('inward_page', ['qulitys' => $qulitys]);
@@ -137,25 +123,35 @@ class AllController extends Controller
 
     public function logout(Request $request)
     {
-        // if(Auth::logout()){
-        // Session::flash();
-        // $request->session()->flash('key', $value);
-        // return $request;
         $request->session()->flush();
-        // return "You are Log Out.";
         return redirect()->route('log_in_page');
-        // return view('login_form');
     }
 
 
 
     public function enter_inward(inwardsRequest $req)
     {
-        return "<h1>Thank You For Visit.</h1>";
+        $inward_data = new inward();
+        $inward_data->Date_Time = $req->date_time;
+        $inward_data->Quality = $req->select;
+        $inward_data->Meter = $req->number;
+        $inward_data->save();
+        return $req;
     }
 
-    public function enter_outward(inwardsRequest $req)
+    public function enter_outward(outwardRequest $req)
     {
-        return $req;
+        $outward_data = new outward();
+        $outward_data->Vendor = $req->select_vender;
+        $outward_data->Date_Time = $req->date_time;
+        $outward_data->Quality = $req->select;
+        $outward_data->Meter = $req->number;
+        $outward_data->save();
+        return view('success_message');
+    }
+
+    public function message()
+    {
+        return view('success_message');
     }
 }

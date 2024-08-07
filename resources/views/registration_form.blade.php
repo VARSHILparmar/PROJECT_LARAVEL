@@ -47,7 +47,7 @@
             </span>
             <br>
             {{-- <input type="submit" name="submit" id="button"> --}}
-            <button type="submit" id="button">submit</button>
+            <button type="submit" id="button">Submit</button>
             <input type="reset" name="reset" id="button1">
             <p>Already have Registered? <a href="{{ route('log_in_page') }}">LOG-IN</a></p>
         </form>

@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class inwardsRequest extends FormRequest
+class outwardRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,6 +22,7 @@ class inwardsRequest extends FormRequest
     public function rules(): array
     {
         return [
+            'select_vender' => 'required',
             'date_time' => 'required|after:today',
             'select' => 'required',
             'number' => 'required|numeric|min:0',
@@ -30,6 +31,7 @@ class inwardsRequest extends FormRequest
 
     public function messages(){
         return [
+            'select_vender.required' => 'Select Vender is Required ',
             'date_time.required' => 'Date & Time is Required',
             'date_time.after' => 'Enter only Current or Future Date-Time',
             'select.required' => 'Select Quality is Required',

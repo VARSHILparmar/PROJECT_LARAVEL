@@ -15,8 +15,8 @@
         <form action="{{ route('log_in') }}" method="POST">
             @csrf
             <h1>LOG IN</h1>
-            <label for="Username">USERNAME</label>
-            <input type="text" name="email" id="Username">
+            <label for="email">Email</label>
+            <input type="text" name="email" id="email">
             <span>
                 @error('email')
                     {{ $message }}
@@ -30,6 +30,9 @@
                     {{ $message }}
                 @enderror
             </span>
+            @if (Session::has('error'))
+                <span>{{ Session::get('error') }}</span>
+            @endif
             <button type="submit">Log In</button>
             <p>Don't have Registered? <a href="{{ route('registration_page') }}">Register</a></p>
         </form>
