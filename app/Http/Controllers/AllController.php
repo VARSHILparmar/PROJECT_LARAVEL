@@ -136,7 +136,7 @@ class AllController extends Controller
         $inward_data->Quality = $req->select;
         $inward_data->Meter = $req->number;
         $inward_data->save();
-        return $req;
+        return redirect()->route('success');
     }
 
     public function enter_outward(outwardRequest $req)
@@ -147,7 +147,7 @@ class AllController extends Controller
         $outward_data->Quality = $req->select;
         $outward_data->Meter = $req->number;
         $outward_data->save();
-        return view('success_message');
+        return redirect()->route('success');
     }
 
     public function message()

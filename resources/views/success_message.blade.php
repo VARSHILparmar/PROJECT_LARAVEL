@@ -11,11 +11,12 @@
 
 <body>
     <div class="message">
+        <img src="/images/check (1).png" alt="photo">
         <h1 class="succsess">SUCCSESS</h1>
-        <p class="text1">Your Data is Inserted In Database.</p>
-        <p class="text2">THE END</p>
-        <button class="home">Home</button>
-        <button class="logout">Log out</button>
+        <p class="text1">Your Data Has Been Succesfully Submitted. Thanks!</p>
+
+        <a href="{{ route('main_page') }}" class="home">OK</a>
+
     </div>
 </body>
 

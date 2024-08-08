@@ -28,4 +28,5 @@ Route::post('/main-page/inward',[AllController::class,'enter_inward'])->name('ad
 
 Route::post('/main-page/outward',[AllController::class,'enter_outward'])->name('add_outward');
 
+Route::get('/main-page/success',[AllController::class,'message'])->name('success');
 
